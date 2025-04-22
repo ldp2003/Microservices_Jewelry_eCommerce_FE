@@ -1,81 +1,114 @@
 import React, { use, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
+import { ShoppingCart, Bell, MessageCircle, User, Search } from "lucide-react";
+import vectorIcon from "./assets/Diamond.png";
+import logo from "./assets/logo.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const collections = [
-    {
-        id: 1,
-        title: "Thiên đường kim cương",
-        description: "Bộ sưu tập trang sức quyến rũ chứa đựng bản chất của sự thanh lịch và tinh tế vượt thời gian",
-        image: "https://picsum.photos/id/1/200",
-    },
-    {
-        id: 2,
-        title: "Sói Bạc",
-        description: "Bộ sưu tập trang sức quyến rũ phản ánh tinh thần hoang dã bất khuất.",
-        image: "https://picsum.photos/id/20/200",
-    },
-    {
-        id: 3,
-        title: "Thiên đường đôi lứa",
-        description: "Bộ sưu tập trang sức quyến rũ tôn vinh mối quan hệ tình yêu vĩnh cửu.",
-        image: "https://picsum.photos/id/30/200",
-    },
-    {
-        id: 4,
-        title: "Dung Nham Hoàng Kim",
-        description: "Bộ sưu tập trang sức rạng rỡ nắm bắt được bản chất của vàng nóng cháy.",
-        image: "https://picsum.photos/id/40/200",
-    }
-    ,
-    {
-        id: 5,
-        title: "Dung Nham Hoàng Kim",
-        description: "Bộ sưu tập trang sức rạng rỡ nắm bắt được bản chất của vàng nóng cháy.",
-        image: "https://picsum.photos/id/50/200",
-    },
-    {
-        id: 6,
-        title: "Dung Nham Hoàng Kim",
-        description: "Bộ sưu tập trang sức rạng rỡ nắm bắt được bản chất của vàng nóng cháy.",
-        image: "https://picsum.photos/id/60/200",
-    }
-];
-
 const Collection = () => {
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+    const fetchSearchingProducts = () => {
+        console.log("Tìm kiếm với từ khóa:", searchKeyword);
+    };
+
+
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredCollections, setFilteredCollections] = useState([]);
+    const [collections, setCollections] = useState([]);
 
-     useEffect(() => {
-            const fetchColletions = async () => {
-                try {
-                    const response = await fetch('http://localhost:8080/api/collection/listCollection');
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    setFilteredCollections(data);
-                } catch (error) {
-                    console.error('Failed to fetch collections:', error);
+
+    useEffect(() => {
+        const fetchColletions = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/collection/listCollection');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            };
-    
-            fetchColletions();
-        }, []);
+                const data = await response.json();
+                setCollections(data);
+                setFilteredCollections(data);
+            } catch (error) {
+                console.error('Failed to fetch collections:', error);
+            }
+        };
 
+        fetchColletions();
+    }, []);
+    
     const handleSearch = () => {
-        const filtered = collections.filter(collection =>
-            collection.title.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
-            collection.description.toLowerCase().includes(searchTerm.trim().toLowerCase())
+        const filtered = collections.filter(collections =>
+            collections.name.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
+            collections.description.toLowerCase().includes(searchTerm.trim().toLowerCase())
         );
         setFilteredCollections(filtered);
+        console.log("setFilteredCollections", filteredCollections);
     };
 
 
     return (
         <div className="min-h-screen bg-bgOuter mx-auto px-6 lg:px-20 py-6">
+            <header className="header">
+                <div className="flex justify-between items-center p-4">
+                    <div className="flex gap-4">
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <ShoppingCart size={18} />
+                            <span>Giỏ Hàng</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <Bell size={18} />
+                            <span>Liên Hệ</span>
+                        </a>
+                    </div>
+
+                    <div className="w-24 md:w-32">
+                        <img src={logo} alt="TINH TÚ" className="w-full" />
+                    </div>
+
+                    <div className="flex gap-4">
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <MessageCircle size={18} />
+                            <span>Chat Bot</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <User size={18} />
+                            <span>Tài Khoản</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center my-4">
+                    <div className="w-1/4 h-px bg-gray-500"></div>
+                    <img src={vectorIcon} alt="Diamond Icon" className="w-8 mx-2" />
+                    <div className="w-1/4 h-px bg-gray-500"></div>
+                </div>
+
+                <nav className="flex flex-col md:flex-row md:justify-between items-center gap-4 p-4">
+                    <div className="flex flex-wrap gap-3">
+                        <Link to="/" className="text-sm md:text-base hover:underline text-white">Trang Chủ</Link>
+                        <Link to="/product/1" className="text-sm md:text-base hover:underline text-white">Trang Sức</Link>
+                        <Link to="/product/2" className="text-sm md:text-base hover:underline text-white">Trang Sức Cưới</Link>
+                        <Link to="/product/3" className="text-sm md:text-base hover:underline text-white">Đồng Hồ</Link>
+                        <Link to="/product/4" className="text-sm md:text-base hover:underline text-white">Quà Tặng</Link>
+                        <Link to="/collection" className="text-sm md:text-base hover:underline text-white">Bộ Sưu Tập</Link>
+                    </div>
+
+                    <div className="flex border rounded-lg overflow-hidden">
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            className="px-3 py-2 w-40 md:w-60 text-black"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                        />
+                        <button className="bg-blue-500 px-3 flex items-center text-white">
+                            <Search size={18} />
+                        </button>
+                    </div>
+                </nav>
+            </header>
             <div className="text-white mb-4 flex justify-center">
                 <Link to="/" className="text-gray-400">Trang chủ </Link> / Bộ sưu tập
             </div>
@@ -119,7 +152,7 @@ const Collection = () => {
                                         src={imageUrl}
                                         alt={collection.title}
                                         className="w-full h-[300px] object-cover bg-gray-800 rounded-lg shadow-xl relative z-10 cursor-pointer"
-        />
+                                    />
                                 </Link>
                             </div>
                             <div className="w-1/2 flex flex-col justify-center">

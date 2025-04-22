@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Slider from "react-slick";
+import { ShoppingCart, Bell, MessageCircle, User, Search } from "lucide-react";
+import vectorIcon from "./assets/Diamond.png";
+import logo from "./assets/logo.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const CollectionDetail = () => {
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+    const fetchSearchingProducts = () => {
+        console.log("Tìm kiếm với từ khóa:", searchKeyword);
+    };
+
     const { collectionId } = useParams();
     const [collection, setCollection] = useState(null);
     const [products, setProducts] = useState([]);
@@ -65,8 +74,66 @@ const CollectionDetail = () => {
     if (!collection) return <div>Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-bgOuter px-10 py-6">
-            {/* Breadcrumb */}
+        <div className="min-h-screen bg-bgOuter mx-auto px-6 lg:px-20 py-6">
+            <header className="header">
+                <div className="flex justify-between items-center p-4">
+                    <div className="flex gap-4">
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <ShoppingCart size={18} />
+                            <span>Giỏ Hàng</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <Bell size={18} />
+                            <span>Liên Hệ</span>
+                        </a>
+                    </div>
+
+                    <div className="w-24 md:w-32">
+                        <img src={logo} alt="TINH TÚ" className="w-full" />
+                    </div>
+
+                    <div className="flex gap-4">
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <MessageCircle size={18} />
+                            <span>Chat Bot</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-1 text-white">
+                            <User size={18} />
+                            <span>Tài Khoản</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center my-4">
+                    <div className="w-1/4 h-px bg-gray-500"></div>
+                    <img src={vectorIcon} alt="Diamond Icon" className="w-8 mx-2" />
+                    <div className="w-1/4 h-px bg-gray-500"></div>
+                </div>
+
+                <nav className="flex flex-col md:flex-row md:justify-between items-center gap-4 p-4">
+                    <div className="flex flex-wrap gap-3">
+                        <Link to="/" className="text-sm md:text-base hover:underline text-white">Trang Chủ</Link>
+                        <Link to="/product/1" className="text-sm md:text-base hover:underline text-white">Trang Sức</Link>
+                        <Link to="/product/2" className="text-sm md:text-base hover:underline text-white">Trang Sức Cưới</Link>
+                        <Link to="/product/3" className="text-sm md:text-base hover:underline text-white">Đồng Hồ</Link>
+                        <Link to="/product/4" className="text-sm md:text-base hover:underline text-white">Quà Tặng</Link>
+                        <Link to="/collection" className="text-sm md:text-base hover:underline text-white">Bộ Sưu Tập</Link>
+                    </div>
+
+                    <div className="flex border rounded-lg overflow-hidden">
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm"
+                            className="px-3 py-2 w-40 md:w-60 text-black"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                        />
+                        <button className="bg-blue-500 px-3 flex items-center text-white">
+                            <Search size={18} />
+                        </button>
+                    </div>
+                </nav>
+            </header>
             <div className="text-white mb-4 flex justify-center">
                 <Link to="/" className="text-gray-400">Trang chủ</Link> /
                 <Link to="/collection" className="text-gray-400 mx-1">Bộ sưu tập</Link>/ {collection.name}
@@ -82,7 +149,7 @@ const CollectionDetail = () => {
                                     src={image}
                                     alt={`${collection.name} banner ${index + 1}`}
                                     className="h-full w-[80%] object-cover rounded-lg"
-                    />
+                                />
                             </div>
                         </div>
                     ))}

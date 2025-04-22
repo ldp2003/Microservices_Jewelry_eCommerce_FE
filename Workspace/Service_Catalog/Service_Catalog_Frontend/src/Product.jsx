@@ -374,7 +374,7 @@ const Product = () => {
     }, [gender, price, material, brand, onSale, searchTerm, products, size, goldKarat, color]);
 
     return (
-        <div className="min-h-screen bg-bgOuter px-10 py-6">
+        <div className="min-h-screen bg-bgOuter mx-auto px-6 lg:px-20 py-6">
             <header className="header">
                 <div className="flex justify-between items-center p-4">
                     <div className="flex gap-4">
